@@ -2,8 +2,9 @@
  * Components
  */
 
-import { Input } from './pi';
+import { Input, Result } from './pi';
 
 export {
-    Input
+    Input,
+    Result
 };

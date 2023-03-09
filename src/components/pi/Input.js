@@ -2,10 +2,11 @@
  * PI - Input
  */
 
+import React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-const Input = () => {
+const Input = ({ score, onChange }) => {
     return (
         <Box
             component="form"
@@ -17,10 +18,19 @@ const Input = () => {
             autoComplete="off"
         >
             <TextField
-                id="outlined-multiline-static"
+                id="piInput"
                 label="PI"
                 multiline
                 rows={20}
+                value={score}
+                onChange={e => onChange({ current: e.target.value})}
+                autoFocus
+                focused
+                onFocus={(e) =>
+                    e.currentTarget.setSelectionRange(
+                    e.currentTarget.value.length,
+                    e.currentTarget.value.length
+                )}
             />
         </Box>
     )
