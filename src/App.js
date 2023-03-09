@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+/*
+ * PI App
+ */
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, BrowserRouter } from "react-router-dom"
+import { Game, Leaderboard } from './pages';
+
+const App = () => {
+    return (
+        <div className="App">
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Game />} />
+                    <Route path="leaderboard" element={<Leaderboard />} />
+                </Routes>
+            </BrowserRouter>
+        </div>
+    );
+};
 
 export default App;
