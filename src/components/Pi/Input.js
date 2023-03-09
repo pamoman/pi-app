@@ -7,6 +7,12 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
 const Input = ({ score, onChange }) => {
+    const handleOnChange = (e) => {
+        const [_, value] =  e.target.value.split('3.');
+
+        onChange({ current: value });
+    };
+
     return (
         <Box
             component="form"
@@ -22,8 +28,8 @@ const Input = ({ score, onChange }) => {
                 label="PI"
                 multiline
                 rows={20}
-                value={score}
-                onChange={e => onChange({ current: e.target.value})}
+                value={'3.' + score}
+                onChange={handleOnChange}
                 autoFocus
                 focused
                 onFocus={(e) =>
