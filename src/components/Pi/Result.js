@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { Modal, Stack, Box, Button, Typography } from '@mui/material';
+import { Modal, Stack, Button, Typography } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 
 const Result = ({ open, onClose, score }) => {
