@@ -56,7 +56,7 @@ const Leaderboard = () => {
                 </Alert>
             </Snackbar>
 
-            <TableContainer sx={{ overFlow: 'auto'}} component={Paper}>
+            <TableContainer sx={{ overFlow: 'auto' }} component={Paper}>
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                     <TableHead>
                         <TableRow>

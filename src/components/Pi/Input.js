@@ -8,16 +8,22 @@ import TextField from '@mui/material/TextField';
 
 const Input = ({ score, onChange }) => {
     const handleOnChange = (e) => {
+        const regex = /^[0-9\b]+$/;
         const [_, value] =  e.target.value.split('3.');
 
-        onChange({ current: value });
+        if (value === "" || regex.test(value)) {
+            onChange({ current: value });
+        }
+    };
+
+    const handlePrevent = (e) => {
+        e.preventDefault();
     };
 
     return (
         <Box
             component="form"
             sx={{
-                p: 8,
                 '& .MuiTextField-root': { width: '100%' }
             }}
             noValidate
@@ -25,7 +31,7 @@ const Input = ({ score, onChange }) => {
         >
             <TextField
                 id="piInput"
-                label="PI"
+                label="Pi"
                 multiline
                 rows={20}
                 value={'3.' + score}
@@ -37,6 +43,10 @@ const Input = ({ score, onChange }) => {
                     e.currentTarget.value.length,
                     e.currentTarget.value.length
                 )}
+                onContextMenu={handlePrevent}
+                onPaste={handlePrevent}
+                onCut={handlePrevent}
+                onCopy={handlePrevent}
             />
         </Box>
     )

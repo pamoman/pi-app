@@ -11,8 +11,10 @@ import pi from './pi';
 import { Input, Result } from '../../components';
 
 const Game = () => {
+    const [programs, setPrograms] = useState([]);
     const [classes, setClasses] = useState([]);
     const [player, setPlayer] = useState("");
+    const [program, setProgram] = useState("");
     const [klass, setKlass] = useState("");
     const [start, setStart] = useState(false);
     const [score, setScore] = useState("");
@@ -23,6 +25,9 @@ const Game = () => {
         classRequests.getAll().then(res => {
             const { data } = res || {};
 
+            const programs = classRequests.getPrograms(data);
+
+            setPrograms(programs);
             setClasses(data);
         });
     }, []);
@@ -66,6 +71,7 @@ const Game = () => {
 
     const resetGame = () => {
         setPlayer('');
+        setProgram('');
         setKlass('');
         setStart(false);
         setScore('');
@@ -94,29 +100,44 @@ const Game = () => {
                             select
                             sx={{ width: 200 }}
                             required
-                            labelId="Klass"
+                            id="player-program"
+                            label="Program"
+                            value={program}
+                            defaultValue=""
+                            onChange={(e) => setProgram(e.target.value)}
+                            disabled={start || !player}
+                        >
+                            {programs.map(p => (
+                                <MenuItem key={p} value={p}>{p}</MenuItem>
+                            ))}
+                        </TextField>
+
+                        <TextField
+                            select
+                            sx={{ width: 200 }}
+                            required
                             id="player-class"
                             label="Klass"
                             value={klass}
                             defaultValue=""
                             onChange={(e) => setKlass(e.target.value)}
-                            disabled={start}
+                            disabled={start || !program}
                         >
-                            {classes.map(c => (
-                                <MenuItem value={c.id}>{c?.attributes?.name}</MenuItem>
+                            {classes.filter(c => c?.attributes?.name.includes(program)).map(c => (
+                                <MenuItem key={c.id} value={c.id}>{c?.attributes?.name}</MenuItem>
                             ))}
                         </TextField>
                     </Stack>
 
                     <Stack justifyContent={"center"} spacing={4} direction="row">
                         {!start ?
-                            <Button sx={{ width: 432}} type="submit" variant="contained" endIcon={<PlayCircleIcon />}>
+                            <Button sx={{ width: 664}} type="submit" variant="contained" endIcon={<PlayCircleIcon />}>
                                 Spela
                             </Button>
 
                             :
 
-                            <Button sx={{ width: 432}} variant="contained" endIcon={<CancelIcon />} onClick={quitGame}>
+                            <Button sx={{ width: 664}} variant="contained" endIcon={<CancelIcon />} onClick={quitGame}>
                                 Avsluta
                             </Button>
                         }
