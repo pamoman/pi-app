@@ -4,8 +4,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { classRequests, playerRequests } from '../../api';
-import { Stack, Box, Button, TextField, Select, MenuItem, Typography, Divider } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
+import { Stack, Box, Button, TextField, MenuItem, Typography, Divider } from '@mui/material';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 import pi from './pi';
 import { Input, Result } from '../../components';
 
@@ -50,7 +51,7 @@ const Game = () => {
             const data = {
                 name: player,
                 class: klass,
-                score: current
+                score: gameScore
             };
     
             playerRequests.create({ data });
@@ -74,7 +75,7 @@ const Game = () => {
 
     return (
         <Stack spacing={4}>
-            <Typography variant="h3">Pamo PI</Typography>
+            <Typography variant="h3" align="center">Pi Spel</Typography>
 
             <Box component="form" onSubmit={handlePlayer}>
                 <Stack spacing={4}>
@@ -109,14 +110,14 @@ const Game = () => {
 
                     <Stack justifyContent={"center"} spacing={4} direction="row">
                         {!start ?
-                            <Button type="submit" variant="contained" endIcon={<SendIcon />}>
-                                Start
+                            <Button sx={{ width: 432}} type="submit" variant="contained" endIcon={<PlayCircleIcon />}>
+                                Spela
                             </Button>
 
                             :
 
-                            <Button variant="contained" endIcon={<SendIcon />} onClick={quitGame}>
-                                Stopp
+                            <Button sx={{ width: 432}} variant="contained" endIcon={<CancelIcon />} onClick={quitGame}>
+                                Avsluta
                             </Button>
                         }
                     </Stack>
