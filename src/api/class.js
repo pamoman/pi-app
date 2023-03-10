@@ -7,7 +7,12 @@ import qs from 'qs';
 
 const classRequests = {
     getAll: async () => {
-        const query = {};
+        const query = {
+            pagination: {
+                limit: 200
+            },
+            sort: ['name:asc']
+        };
 
         const queryStr = qs.stringify(query, {
             encodeValuesOnly: true,
