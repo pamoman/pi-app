@@ -30,7 +30,7 @@ const playerRequests = {
             pagination: {
                 limit
             },
-            sort: ['score:desc'] 
+            sort: ['score:desc', 'name'] 
         };
 
         const queryStr = qs.stringify(query, {

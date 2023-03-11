@@ -3,7 +3,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { classRequests, playerRequests } from '../../api';
+import { programRequests, playerRequests } from '../../api';
 import { Stack, Box, Button, TextField, MenuItem, Typography, Divider } from '@mui/material';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -12,23 +12,19 @@ import { Input, Result } from '../../components';
 
 const Game = () => {
     const [programs, setPrograms] = useState([]);
-    const [classes, setClasses] = useState([]);
     const [player, setPlayer] = useState("");
     const [program, setProgram] = useState("");
     const [klass, setKlass] = useState("");
     const [start, setStart] = useState(false);
     const [score, setScore] = useState("");
-    const [result, setResult] = useState(false);
+    const [result, setResult] = useState('');
     const [showResult, setShowResult] = useState(false);
 
     useEffect(() => {
-        classRequests.getAll().then(res => {
+        programRequests.getAll().then(res => {
             const { data } = res || {};
 
-            const programs = classRequests.getPrograms(data);
-
-            setPrograms(programs);
-            setClasses(data);
+            setPrograms(data);
         });
     }, []);
 
@@ -75,7 +71,7 @@ const Game = () => {
         setKlass('');
         setStart(false);
         setScore('');
-        setResult(false);
+        setResult('');
         setShowResult(false);
     };
 
@@ -108,7 +104,7 @@ const Game = () => {
                             disabled={start || !player}
                         >
                             {programs.map(p => (
-                                <MenuItem key={p} value={p}>{p}</MenuItem>
+                                <MenuItem key={p.id} value={p.id}>{p?.attributes?.name}</MenuItem>
                             ))}
                         </TextField>
 
@@ -123,7 +119,7 @@ const Game = () => {
                             onChange={(e) => setKlass(e.target.value)}
                             disabled={start || !program}
                         >
-                            {classes.filter(c => c?.attributes?.name.includes(program)).map(c => (
+                            {programs.find(p => p.id === program)?.attributes?.classes?.data?.map(c => (
                                 <MenuItem key={c.id} value={c.id}>{c?.attributes?.name}</MenuItem>
                             ))}
                         </TextField>

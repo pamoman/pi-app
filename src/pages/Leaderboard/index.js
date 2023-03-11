@@ -3,19 +3,33 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
+import { useSocket } from '../../contexts';
 import { playerRequests } from '../../api';
-import { StyledTableRow, StyledTableCell } from '../../components';
-import { Stack, Paper, Typography, Snackbar, Alert } from '@mui/material';
+import { StyledTableRow, StyledTableCell, NewScore } from '../../components';
+import { Stack, Paper, Typography } from '@mui/material';
 import { TableContainer, TableHead, TableRow, Table, TableBody } from '@mui/material';
 
 const Leaderboard = () => {
-    const socket = io(process.env.REACT_APP_STRAPI_URL);
-    const [isConnected, setIsConnected] = useState(socket.connected);
-
+    const socket = useSocket();
     const [newPlayer, setNewPlayer] = useState();
     const [alertNewPlayer, setAlertNewPlayer] = useState(false);
     const [players, setPlayers] = useState([]);
+
+    const getPosition = (score) => {
+        const scores = [score];
+
+        players.forEach(player => {
+            const playerScore = player?.attributes?.score;
+
+            if (!scores.includes(playerScore)) {
+                scores.push(playerScore);
+            }
+        });
+
+        const sortedScores = scores.sort((a, b) => b - a);
+
+        return sortedScores.indexOf(score) + 1;
+    };
 
     useEffect(() => {
         playerRequests.getMany({ limit: 20 }).then(res => {
@@ -26,22 +40,12 @@ const Leaderboard = () => {
     }, [newPlayer]);
 
     useEffect(() => {
-        socket.on('connect', () => {
-            setIsConnected(true);
-        });
-      
-        socket.on('disconnect', () => {
-            setIsConnected(false);
-        });
-
         socket.on('new-player', (data) => {
             setNewPlayer(data);
             setAlertNewPlayer(true);
         });
       
         return () => {
-            socket.off('connect');
-            socket.off('disconnect');
             socket.off('new-player');
         };
     }, [socket]);
@@ -50,11 +54,21 @@ const Leaderboard = () => {
         <Stack spacing={4}>
             <Typography variant="h3" align="center">Pi Leaderboard</Typography>
 
-            <Snackbar open={alertNewPlayer} autoHideDuration={6000} onClose={() => setAlertNewPlayer(false)}>
-                <Alert onClose={() => setNewPlayer(null)} severity="info" sx={{ width: '100%' }}>
-                    {newPlayer?.name} fick {newPlayer?.score} decimaler!
-                </Alert>
-            </Snackbar>
+            <NewScore
+                open={alertNewPlayer}
+                onClose={() => setAlertNewPlayer(false)}
+                autoHideDuration={6000}
+                player={newPlayer?.name}
+                score={newPlayer?.score}
+                pos={players
+                    .find(player => player?.id === newPlayer?.id)
+                    ? getPosition(newPlayer?.score)
+                    : null
+                }
+                sharedPos={players
+                    .filter(player => player?.attributes?.score === newPlayer?.score)?.length > 1
+                }
+            />
 
             <TableContainer sx={{ overFlow: 'auto' }} component={Paper}>
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -68,10 +82,10 @@ const Leaderboard = () => {
                     </TableHead>
 
                     <TableBody>
-                        {players.map((player, pos) => (
+                        {players.map((player, index) => (
                             <StyledTableRow key={player.id}>
                                 <StyledTableCell>
-                                    {pos + 1}
+                                    {getPosition(player?.attributes?.score, index)}
                                 </StyledTableCell>
 
                                 <StyledTableCell>
@@ -90,19 +104,6 @@ const Leaderboard = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-
-            <Snackbar
-                open={true}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            >
-                {isConnected ?
-                    <Alert severity="success" sx={{ width: '100%' }} />
-
-                    :
-
-                    <Alert severity="error" sx={{ width: '100%' }} />
-                }
-            </Snackbar>
         </Stack>
     )
 };
