@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { Modal, Stack, Button, Typography } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 const Result = ({ open, onClose, score }) => {
     const style = {
@@ -36,7 +36,7 @@ const Result = ({ open, onClose, score }) => {
                     <Button
                         type="submit"
                         variant="contained"
-                        endIcon={<SendIcon />}
+                        endIcon={<RestartAltIcon />}
                         onClick={onClose}
                     >
                         Starta om
