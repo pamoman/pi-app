@@ -22,10 +22,12 @@ const playerRequests = {
 
         return res?.data;
     },
-    getMany: async ({ limit= 20 }) => {
+    getMany: async ({ limit = 20 }) => {
         const query = {
             populate: {
-                class: true
+                class: {
+                    fields: ['name']
+                }
             },
             pagination: {
                 limit
@@ -41,6 +43,25 @@ const playerRequests = {
 
         return res?.data;
     },
+    getLeaderboard: async ({ limit = 20 }) => {
+        const query = {
+            populate: {
+                class: {
+                    fields: ['name']
+                }
+            },
+            sort: ['score:desc', 'name'],
+            limit
+        };
+
+        const queryStr = qs.stringify(query, {
+            encodeValuesOnly: true,
+        });
+
+        const res = await axiosInstance.get(`/api/players/leaderboard?${queryStr}`);
+
+        return res?.data;
+    },
     findOne: async ({ id }) => {
         const query = {};
 
@@ -53,9 +74,13 @@ const playerRequests = {
         return res?.data;
     },
     create: async ({ data }) => {
-        const res = await axiosInstance.post(`/api/players`, { data });
+        try {
+            const res = await axiosInstance.post(`/api/players`, { data });
 
-        return res;
+            return res;
+        } catch(e) {
+            console.log(e.message);
+        }
     }
 };
 

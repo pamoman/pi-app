@@ -5,7 +5,10 @@
 import React, { useEffect } from 'react';
 import { Modal, Stack, Typography } from '@mui/material';
 
-const NewScore = ({ open, onClose, player, score, pos = null, sharedPos = false, autoHideDuration, ...props }) => {
+const NewScore = ({ open, onClose, autoHideDuration, player, ...props }) => {
+    const { name, score, stats } = player || {};
+    const { position = null, shared = false } = stats || {};
+
     const style = {
         position: 'absolute',
         top: '50%',
@@ -38,16 +41,12 @@ const NewScore = ({ open, onClose, player, score, pos = null, sharedPos = false,
             <Stack spacing={4} sx={style}>
                 <Typography align="center" variant="h2">Ny Resultat</Typography>
 
-                <Typography align="center" variant="h3">{player}</Typography>
+                <Typography align="center" variant="h3">{name}</Typography>
 
                 <Typography align="center" variant="h4">
                     {`Resultat: ${score}`}
-                    {pos &&
-                        <>
-                            <br />
-                            {`${sharedPos ? 'Delad plats' : 'Plats'}: ${pos}`}
-                        </>
-                    }
+                    <br />
+                    {`${shared ? 'Delad plats' : 'Plats'}: ${position}`}
                 </Typography>
             </Stack>
         </Modal>

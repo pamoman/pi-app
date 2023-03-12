@@ -106,6 +106,10 @@ const Game = () => {
                             {programs.map(p => (
                                 <MenuItem key={p.id} value={p.id}>{p?.attributes?.name}</MenuItem>
                             ))}
+
+                            {!programs.length > 0 &&
+                                <MenuItem key={"placeholder"} value={""} disabled>{'Finns ingen'}</MenuItem>
+                            }
                         </TextField>
 
                         <TextField
@@ -122,6 +126,10 @@ const Game = () => {
                             {programs.find(p => p.id === program)?.attributes?.classes?.data?.map(c => (
                                 <MenuItem key={c.id} value={c.id}>{c?.attributes?.name}</MenuItem>
                             ))}
+
+                            {!programs.length > 0 &&
+                                <MenuItem key={"placeholder"} value={""} disabled>{'Finns ingen'}</MenuItem>
+                            }
                         </TextField>
                     </Stack>
 
