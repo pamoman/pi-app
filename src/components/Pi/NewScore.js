@@ -28,7 +28,7 @@ const NewScore = ({ open, onClose, autoHideDuration, player, ...props }) => {
 
             return () => clearTimeout(timer);
         }
-    }, [open]);
+    }, [open, onClose, autoHideDuration]);
       
     return (
         <Modal
