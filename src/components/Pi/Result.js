@@ -3,10 +3,10 @@
  */
 
 import React from 'react';
-import { Modal, Stack, Button, Typography } from '@mui/material';
+import { Box, Modal, Stack, Button, Typography } from '@mui/material';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
-const Result = ({ open, onClose, score }) => {
+const Result = ({ open, onClose, score, details }) => {
     const style = {
         position: 'absolute',
         top: '50%',
@@ -31,6 +31,10 @@ const Result = ({ open, onClose, score }) => {
                 <Typography align="center" variant="h2">Resultat</Typography>
 
                 <Typography align="center" variant="h2">{score}</Typography>
+
+                <Box sx={{ maxHeight: 200, p: 1, overflow: 'scroll', border: '2px solid #42a5f5' }}>
+                    <Typography sx={{ wordWrap: 'break-word' }} variant="body">{details}</Typography>
+                </Box>
 
                 <Stack justifyContent={"center"} spacing={4} direction="row">
                     <Button

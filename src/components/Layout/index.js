@@ -29,10 +29,12 @@ const Layout = ({ children }) => {
     }, [socket]);
 
     return (
-        <Stack spacing={2}>
+        <Stack sx={{ backgroundColor: '#171d25', color: '#FFFFFF' }} spacing={2}>
             <Box sx={{ pl: 4, pr: 4, pt: 4 }} component="header">
                 <Stack direction="row" sx={{ height: 40 }}>
-                    <Box component="img" src={pi} />
+                    <Box sx={{ p: 1, width: 64, height: 64, background: 'white', borderRadius: 4 }}>
+                        <Box component="img" src={pi} sx={{ height: '100%' }} />
+                    </Box>
 
                     <Snackbar
                         open={true}

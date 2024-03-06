@@ -7,7 +7,7 @@ import { programRequests, playerRequests } from '../../api';
 import { Stack, Box, Button, TextField, MenuItem, Typography, Divider } from '@mui/material';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import pi from './pi';
+import pi from '../../assets/pi';
 import { Input, Result } from '../../components';
 
 const Game = () => {
@@ -35,30 +35,51 @@ const Game = () => {
     };
 
     const handleGame = ({ current, quit = false }) => {
-        const matchPi = pi.slice(0, current.length);
+        setScore(current);
 
-        if ((current != matchPi) || quit) {
-            let gameScore;
+        if (quit) {
+            const res = endGame(current);
 
-            if (quit) {
-                gameScore = current.length;
-            } else {
-                gameScore = current.length - 1;
-            }
+            setResult(res);
 
-            setResult(gameScore);
             setShowResult(true);
 
             const data = {
                 name: player,
                 class: klass,
-                score: gameScore
+                score: res.score
             };
     
             playerRequests.create({ data });
         }
+    };
 
-        setScore(current);
+    const endGame = (current) => {
+        const currentAsArray = current.split('');
+
+        const res = currentAsArray.reduce((game, char) => {
+            game.str += char;
+
+            const pos = game.str.length - 1;
+
+            // eslint-disable-next-line
+            if (char != pi[pos]) {
+                game.errors.push(pos);
+            }
+
+            if (!game.errors.length) {
+                game.score++;
+            }
+
+            return game;
+
+        }, {
+            str: '',
+            errors: [],
+            score: 0
+        });
+
+        return res;
     };
 
     const quitGame = () => {
@@ -155,7 +176,22 @@ const Game = () => {
                 <Input score={score} onChange={handleGame} />
             }
 
-            <Result open={showResult} onClose={resetGame} score={result} />
+            <Result
+                open={showResult}
+                onClose={resetGame}
+                score={result?.score}
+                details={result?.str?.split('').map((c, i) => {
+                    if (result?.errors?.includes(i)) {
+                        return (
+                            <>
+                                <span style={{ color: 'red', fontWeight: 'bold' }}>{c}</span>
+                                (<span style={{ color: '#66FF99', fontWeight: 'bold' }}>{`${pi[i]}`}</span>)
+                            </>
+                        );
+                    }
+                    return c;
+                })}
+            />
         </Stack>
     )
 };

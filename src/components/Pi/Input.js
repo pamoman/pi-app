@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 const Input = ({ score, onChange }) => {
     const handleOnChange = (e) => {
         const regex = /^[0-9\b]+$/;
+        // eslint-disable-next-line
         const [_, value] =  e.target.value.split('3.');
 
         if (value === "" || regex.test(value)) {
