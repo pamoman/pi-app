@@ -32,7 +32,15 @@ const Result = ({ open, onClose, score, details }) => {
 
                 <Typography align="center" variant="h2">{score}</Typography>
 
-                <Box sx={{ maxHeight: 200, p: 1, overflow: 'scroll', border: '2px solid #42a5f5' }}>
+                <Box sx={{
+                    maxHeight: 200,
+                    p: 1,
+                    overflow: 'scroll',
+                    border: '2px solid #42a5f5',
+                    '::-webkit-scrollbar': {
+                        display: 'none'
+                    }
+                }}>
                     <Typography sx={{ wordWrap: 'break-word' }} variant="body">{details}</Typography>
                 </Box>
 
